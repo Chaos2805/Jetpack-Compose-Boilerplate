@@ -7,7 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.aregyan.compose.Routes
+import com.aregyan.compose.ui.ForgotPassword.ForgotPasswordScreen
 import com.aregyan.compose.ui.details.DetailsScreen
+import com.aregyan.compose.ui.login.LoginScreen
+import com.aregyan.compose.ui.signup.SignUpScreen
 import com.aregyan.compose.ui.users.UsersScreen
 
 @Composable
@@ -15,13 +19,25 @@ fun ComposeApp() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Route.USER
+        startDestination = Routes.Login.route
     ) {
+        composable(Routes.Login.route) {
+            LoginScreen(navHostController = navController)
+        }
+
+        composable(Routes.SignUp.route) {
+            SignUpScreen(navHostController = navController)
+        }
+
+        composable(Routes.ForgotPassword.route) {
+            ForgotPasswordScreen(navHostController = navController)
+        }
+
         composable(Route.USER) { backStackEntry ->
             UsersScreen(
                 onUserClick = { username ->
                     // In order to discard duplicated navigation events, we check the Lifecycle
-                    if (backStackEntry.lifecycle.currentState == Lifecycle.State.RESUMED) {
+                    if (backStackEntry.getLifecycle().currentState == Lifecycle.State.RESUMED) {
                         navController.navigate("${Route.DETAIL}/$username")
                     }
                 }
